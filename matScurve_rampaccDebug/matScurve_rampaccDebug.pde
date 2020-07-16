@@ -1,7 +1,7 @@
 int t = 0;
 
 float currentPos,lastSetPos,setPos,lastsetPos = 0;
-float currentVelo,nextVelo,targetVelo;
+float velo,targetVelo;
 float acc;
 
 float dPos, dVelo,dAcc;
@@ -18,8 +18,8 @@ void setup()
   stroke (255);
   line (0,300,1000,300);
   
-  veloRatio = 0.05;                               //velocity ratio
-  accRatio  = 0.05;                                 //acceleration ratio 
+  veloRatio = 0.05;                              //velocity ratio
+  accRatio  = 0.05;                              //acceleration ratio 
 }
 
 void draw()
@@ -46,11 +46,11 @@ void updateVal()
   dPos        =    setPos-currentPos;            //distance from target
   targetVelo  =    (dPos*veloRatio);             //ideal instantaneous velocity
   
-  dVelo       =    targetVelo-currentVelo;       //difference between ideal and actual velocity
+  dVelo       =    targetVelo-velo;              //difference between ideal and actual velocity
   acc         =    (dVelo*accRatio);             //acceleration calculated based on difference in velocities
   
-  nextVelo    =    currentVelo+acc;              //trim velocity for next point
-  currentPos  +=   nextVelo;                     //add trimmed velocity to change position
+  velo        +=   acc;                          //trim velocity for next point
+  currentPos  +=   velo;                         //add trimmed velocity to change position
 }
 
 void plotVal()
@@ -65,13 +65,12 @@ void plotVal()
   
   //actual velocity
   stroke (0,255,0);
-  line (t,300-(currentVelo*20),t,300-(nextVelo*20));
+  point (t,300-(velo*20));
   
   //actual acceleration
   stroke (0,0,255);
   point (t,300-(acc*100));
   
   lastSetPos=setPos;
-  currentVelo=nextVelo;
   println(acc);
 } //<>//
